@@ -1,15 +1,15 @@
-import json
 from copy import deepcopy
 from unittest.mock import patch
+import json
 
-from django.test import RequestFactory
-from django.http import HttpResponseNotAllowed, HttpResponse
-from django.test.utils import override_settings
 from django.conf import settings
+from django.http import HttpResponse, HttpResponseNotAllowed
+from django.test import RequestFactory
+from django.test.utils import override_settings
 
+from django_sns_view.tests.helpers import SNSBaseTest
 from django_sns_view.tests.test_data.notifications import SNS_NOTIFICATION
 from django_sns_view.views import SNSEndpoint
-from django_sns_view.tests.helpers import SNSBaseTest
 
 
 @override_settings(SNS_VERIFY_CERTIFICATE=False)

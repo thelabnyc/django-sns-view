@@ -1,6 +1,6 @@
 # Django SNS View
 
-A drop in configurable django view that is used to subscribe and process AWS SNS messages. 
+A drop in configurable django view that is used to subscribe and process AWS SNS messages.
 
 This repo is a fork of the (now unmaintained) [django-sns-view](https://pypi.org/project/django-sns-view/) package (see also [deep-c/django-sns-view](https://github.com/deep-c/django-sns-view) on GitHub).
 

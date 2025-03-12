@@ -1,12 +1,12 @@
 from copy import deepcopy
-from unittest.mock import patch, Mock
-from requests.exceptions import HTTPError
+from unittest.mock import Mock, patch
 
 from django.conf import settings
+from requests.exceptions import HTTPError
 
-from django_sns_view.utils import get_pemfile, verify_notification, confirm_subscription
-from django_sns_view.tests.test_data.notifications import SNS_SUBSCRIPTION_NOTIFICATION
 from django_sns_view.tests.helpers import SNSBaseTest
+from django_sns_view.tests.test_data.notifications import SNS_SUBSCRIPTION_NOTIFICATION
+from django_sns_view.utils import confirm_subscription, get_pemfile, verify_notification
 
 
 class VerificationTest(SNSBaseTest):
