@@ -1,24 +1,25 @@
 from unittest.mock import MagicMock, Mock, patch
 
+from cryptography import x509
 from django.conf import settings
 from requests.exceptions import HTTPError
 import pydantic
 
-from ..utils import confirm_subscription, get_pemfile, verify_notification
+from ..utils import confirm_subscription, get_x509_cert, verify_notification
 from .helpers import SNSBaseTest
 
 
 class VerificationTest(SNSBaseTest):
     @patch("django_sns_view.utils.requests.get")
-    def test_get_pemfile(self, mock: MagicMock) -> None:
+    def test_get_x509_cert(self, mock: MagicMock) -> None:
         """Test the get_pemfile util"""
         responsemock = Mock()
         mock.return_value = responsemock
         responsemock.text = self.pemfile
-        result = get_pemfile("http://www.fakeurl.com")
+        result = get_x509_cert("http://www.fakeurl.com")
 
         mock.assert_called_with("http://www.fakeurl.com")
-        self.assertEqual(result, self.pemfile)
+        self.assertIsInstance(result, x509.Certificate)
 
     @patch("django_sns_view.utils.requests.get")
     def test_bad_keyfile(self, mock: MagicMock) -> None:
@@ -28,22 +29,22 @@ class VerificationTest(SNSBaseTest):
         mock.return_value = responsemock
 
         with self.assertRaises(ValueError) as context_manager:
-            get_pemfile("http://www.fakeurl.com")
+            get_x509_cert("http://www.fakeurl.com")
 
         the_exception = context_manager.exception
-        self.assertEqual(the_exception.args[0], "Invalid Certificate File")
+        self.assertTrue(the_exception.args[0].startswith("Unable to load PEM file"))
 
-    @patch("django_sns_view.utils.get_pemfile")
+    @patch("django_sns_view.utils.get_x509_cert")
     def test_verify_notification_with_subject(self, mock: MagicMock) -> None:
         """Test the verification of a valid notification with Subject"""
-        mock.return_value = self.pemfile
+        mock.return_value = self.x509_cert
         result = verify_notification(self.sns_notification)
         self.assertTrue(result)
 
-    @patch("django_sns_view.utils.get_pemfile")
+    @patch("django_sns_view.utils.get_x509_cert")
     def test_verify_notification_no_subject(self, mock: MagicMock) -> None:
         """Test the verification of a valid notification without Subject"""
-        mock.return_value = self.pemfile
+        mock.return_value = self.x509_cert
         result = verify_notification(self.sns_notification_no_subject)
         self.assertTrue(result)
 

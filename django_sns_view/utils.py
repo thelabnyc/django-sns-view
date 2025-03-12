@@ -2,12 +2,15 @@ from functools import lru_cache
 import logging
 import re
 
+from cryptography import x509
+from cryptography.exceptions import InvalidSignature
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.asymmetric import padding
+from cryptography.hazmat.primitives.asymmetric.rsa import RSAPublicKey
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.utils.encoding import smart_bytes
-from OpenSSL import crypto
 from requests.exceptions import HTTPError
-import pem
 import requests
 
 from .types import AnySNSPayload, SubscriptionConfirmation
@@ -94,8 +97,8 @@ def verify_notification(payload: AnySNSPayload) -> bool:
     Verify notification came from a trusted source
     Returns True if verified, False if not
     """
-    pemfile = get_pemfile(str(payload.SigningCertURL))
-    cert = crypto.load_certificate(crypto.FILETYPE_PEM, pemfile)
+    cert = get_x509_cert(str(payload.SigningCertURL))
+    public_key = cert.public_key()
     if payload.Type == "Notification":
         if payload.Subject is not None:
             hash_format = NOTIFICATION_HASH_FORMAT
@@ -103,21 +106,28 @@ def verify_notification(payload: AnySNSPayload) -> bool:
             hash_format = NOTIFICATION_HASH_FORMAT_NO_SUBJECT
     else:
         hash_format = SUBSCRIPTION_HASH_FORMAT
+    message = hash_format.format(**payload.model_dump()).encode("utf-8")
+
+    hash_type: hashes.SHA1 | hashes.SHA256
+    if payload.SignatureVersion == "1":
+        hash_type = hashes.SHA1()
+    elif payload.SignatureVersion == "2":
+        hash_type = hashes.SHA256()
+    else:
+        raise ValueError("Unknown SignatureVersion: %s" % payload.SignatureVersion)
+    pss = padding.PKCS1v15()
     try:
-        crypto.verify(
-            cert,
-            payload.Signature,
-            hash_format.format(**payload.model_dump()).encode("utf-8"),
-            "sha1",
-        )
-    except crypto.Error as e:
+        if not isinstance(public_key, RSAPublicKey):
+            raise ValueError("Unknown key type: %s" % public_key)
+        public_key.verify(payload.Signature, message, pss, hash_type)
+    except InvalidSignature as e:
         logger.error("Verification of signature raised an Error: %s", e)
         return False
     return True
 
 
 @lru_cache(maxsize=128)
-def get_pemfile(cert_url: str) -> bytes:
+def get_x509_cert(cert_url: str) -> x509.Certificate:
     """
     Acquire the keyfile
     SNS keys expire and Amazon does not promise they will use the same key
@@ -133,9 +143,5 @@ def get_pemfile(cert_url: str) -> bytes:
     pemfile = smart_bytes(response.text)
     # Extract the first certificate in the file and confirm it's a valid
     # PEM certificate
-    certificates = pem.parse(pemfile)
-    # A proper certificate file will contain 1 certificate
-    if len(certificates) != 1:
-        logger.error("Invalid Certificate File: URL %s", cert_url)
-        raise ValueError("Invalid Certificate File")
-    return pemfile
+    cert = x509.load_pem_x509_certificate(pemfile)
+    return cert

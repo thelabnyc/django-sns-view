@@ -1,5 +1,6 @@
 import os
 
+from cryptography import x509
 from django.conf import settings
 from django.test import TestCase, override_settings
 
@@ -31,3 +32,4 @@ class SNSBaseTest(TestCase):
 
     keyfileobj = open(DIRNAME + ("/test_data/example.pem"))
     pemfile = keyfileobj.read().encode()
+    x509_cert = x509.load_pem_x509_certificate(pemfile)
