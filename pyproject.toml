@@ -9,11 +9,10 @@ license = {text = "ISC"}
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    'Django>=1.7',
-    'pyopenssl>=0.13.1',
-    'pem>=16.0.0',
-    'requests>=2.18.0',
-    'cffi>=1.11.5'
+    "Django>=4.2",
+    "pyOpenSSL>=24.2.1,<24.3.0",  # 24.3.0 removes openssl.verify
+    "pem>=23.1.0",
+    "requests>=2.32.3",
 ]
 
 [tool.poetry]
