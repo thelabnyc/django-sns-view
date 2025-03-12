@@ -11,6 +11,19 @@ SNS_SUBSCRIPTION_NOTIFICATION = {
     "SigningCertURL": "https://sns.ap-southeast-2.amazonaws.com/SimpleNotificationService-433026a4050d206028891664da859041.pem",
 }
 
+SNS_UNSUBSCRIBE_NOTIFICATION = {
+    "Type": "UnsubscribeConfirmation",
+    "MessageId": "ad01b87e-626a-443b-9b28-3c40ff5ebea5",
+    "Token": "2336412f37fb687f5d51e6e241da92fd744699239e28eb25ebcef294aa79b3e339f26b7cc430ce0871bab7b13d28668befdbbf5597a17db06049c896cd457f1b2f3c582a403affaafb2ae9baa6d15d0afc51c0050f0d419a632d55d7a4a024d0d11953fac4753f008d78ea9c5085ef599c4e64846db77b760c00e4377a012448",
+    "TopicArn": "arn:aws:sns:ap-southeast-2:919599206538:test-example",
+    "Message": "You have chosen to subscribe to the topic arn:aws:sns:ap-southeast-2:919599206538:test-example.\nTo confirm the subscription, visit the SubscribeURL included in this message.",
+    "SubscribeURL": "https://sns.ap-southeast-2.amazonaws.com/?Action=ConfirmSubscription&TopicArn=arn:aws:sns:ap-southeast-2:919599206538:test-example&Token=2336412f37fb687f5d51e6e241da92fd744699239e28eb25ebcef294aa79b3e339f26b7cc430ce0871bab7b13d28668befdbbf5597a17db06049c896cd457f1b2f3c582a403affaafb2ae9baa6d15d0afc51c0050f0d419a632d55d7a4a024d0d11953fac4753f008d78ea9c5085ef599c4e64846db77b760c00e4377a012448",
+    "Timestamp": "2018-01-07T04:07:16.301Z",
+    "SignatureVersion": "1",
+    "Signature": "Ps5DODb4HQyVeZnuqnjMxwAXo1xg2/cPiXJ53quM/LzxUYbeh5tWmtOZr5l/kvgVe1DECaEYS5cSgwTrFjEJBt+M1EVXK4AaeiHyzk8LlghA5dhoICg+wkS3kHiQYKvU/JczGODImx0qA2e2HnAZ3DqPb+sY3EI10xebvnsvHoHJ6YqnJdC6L5vjFj6SW1xb+2oAo/teHeZYm/Fb7z17uGL06e80O43y+o/v4M8lZ1qZsUWZzluP48GciBegw4++AWUxNzEZSZKoV3AzCjObLeUHVI6bwTf9+xpKU9vhPPbLwIJyOUXEKlJQEPqgRoFkB+Ts60q2Ikg7h54QZW5CGQ==",
+    "SigningCertURL": "https://sns.ap-southeast-2.amazonaws.com/SimpleNotificationService-433026a4050d206028891664da859041.pem",
+}
+
 SNS_NOTIFICATION = {
     "Type": "Notification",
     "MessageId": "62acea4d-630a-5a7f-8a4e-b886c17258dd",

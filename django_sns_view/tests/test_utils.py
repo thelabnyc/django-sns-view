@@ -1,17 +1,16 @@
-from copy import deepcopy
-from unittest.mock import Mock, patch
+from unittest.mock import MagicMock, Mock, patch
 
 from django.conf import settings
 from requests.exceptions import HTTPError
+import pydantic
 
-from django_sns_view.tests.helpers import SNSBaseTest
-from django_sns_view.tests.test_data.notifications import SNS_SUBSCRIPTION_NOTIFICATION
-from django_sns_view.utils import confirm_subscription, get_pemfile, verify_notification
+from ..utils import confirm_subscription, get_pemfile, verify_notification
+from .helpers import SNSBaseTest
 
 
 class VerificationTest(SNSBaseTest):
     @patch("django_sns_view.utils.requests.get")
-    def test_get_pemfile(self, mock):
+    def test_get_pemfile(self, mock: MagicMock) -> None:
         """Test the get_pemfile util"""
         responsemock = Mock()
         mock.return_value = responsemock
@@ -22,7 +21,7 @@ class VerificationTest(SNSBaseTest):
         self.assertEqual(result, self.pemfile)
 
     @patch("django_sns_view.utils.requests.get")
-    def test_bad_keyfile(self, mock):
+    def test_bad_keyfile(self, mock: MagicMock) -> None:
         """Test a non-valid keyfile"""
         responsemock = Mock()
         responsemock.read.return_value = "Not A Certificate"
@@ -35,14 +34,14 @@ class VerificationTest(SNSBaseTest):
         self.assertEqual(the_exception.args[0], "Invalid Certificate File")
 
     @patch("django_sns_view.utils.get_pemfile")
-    def test_verify_notification_with_subject(self, mock):
+    def test_verify_notification_with_subject(self, mock: MagicMock) -> None:
         """Test the verification of a valid notification with Subject"""
         mock.return_value = self.pemfile
         result = verify_notification(self.sns_notification)
         self.assertTrue(result)
 
     @patch("django_sns_view.utils.get_pemfile")
-    def test_verify_notification_no_subject(self, mock):
+    def test_verify_notification_no_subject(self, mock: MagicMock) -> None:
         """Test the verification of a valid notification without Subject"""
         mock.return_value = self.pemfile
         result = verify_notification(self.sns_notification_no_subject)
@@ -51,7 +50,7 @@ class VerificationTest(SNSBaseTest):
 
 class ConfirmSubscriptionTest(SNSBaseTest):
     @patch("django_sns_view.utils.requests.get")
-    def test_successful_confirm_subscription(self, mock):
+    def test_successful_confirm_subscription(self, mock: MagicMock) -> None:
         """Test a successful subscription confirmation"""
         mock_resp = Mock()
         mock_resp.raise_for_status = Mock()
@@ -61,12 +60,12 @@ class ConfirmSubscriptionTest(SNSBaseTest):
 
         response = confirm_subscription(self.sns_confirmation)
 
-        mock.assert_called_with(self.sns_confirmation["SubscribeURL"])
+        mock.assert_called_with(str(self.sns_confirmation.SubscribeURL))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content.decode("ascii"), "OK")
 
     @patch("django_sns_view.utils.requests.get")
-    def test_fail_confirm_subscription(self, mock):
+    def test_fail_confirm_subscription(self, mock: MagicMock) -> None:
         """Test a successful subscription confirmation"""
         mock_resp = Mock()
         mock_resp.raise_for_status = Mock()
@@ -75,14 +74,14 @@ class ConfirmSubscriptionTest(SNSBaseTest):
         mock.return_value = mock_resp
 
         self.assertRaises(HTTPError, confirm_subscription, self.sns_confirmation)
-        mock.assert_called_with(self.sns_confirmation["SubscribeURL"])
+        mock.assert_called_with(str(self.sns_confirmation.SubscribeURL))
 
-    def test_bad_url(self):
+    def test_bad_url(self) -> None:
         """Test to make sure an invalid URL isn't requested"""
         old_setting = getattr(settings, "SNS_SUBSCRIBE_DOMAIN_REGEX", None)
         settings.SNS_SUBSCRIBE_DOMAIN_REGEX = r"sns.[a-z0-9\-]+.amazonaws.com$"
-        notification = deepcopy(SNS_SUBSCRIPTION_NOTIFICATION)
-        notification["SubscribeURL"] = "http://anon.amazonaws.com"
+        notification = self.sns_confirmation.model_copy()
+        notification.SubscribeURL = pydantic.HttpUrl("http://anon.amazonaws.com")
         result = confirm_subscription(notification)
 
         self.assertEqual(result.status_code, 400)
