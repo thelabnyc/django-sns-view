@@ -53,7 +53,7 @@ class SNSEndpoint(View):
                 return HttpResponseBadRequest("No TopicArn Header")
 
             # Check to see if the topic is in the settings
-            if not request.META[self.topic_type_header] in getattr(
+            if request.META[self.topic_type_header] not in getattr(
                 settings, self.topic_settings_key
             ):
                 return HttpResponseBadRequest("Bad Topic")
@@ -92,13 +92,13 @@ class SNSEndpoint(View):
             )
             return HttpResponseBadRequest("Improper Signature")
 
-        if not self.message_type_header in request.META:
+        if self.message_type_header not in request.META:
             logger.error("HTTP_X_AMZ_SNS_MESSAGE_TYPE not found in request.META")
             return HttpResponseBadRequest("HTTP_X_AMZ_SNS_MESSAGE_TYPE not set")
 
         message_type = request.META[self.message_type_header]
 
-        if not message_type in self.allowed_message_types:
+        if message_type not in self.allowed_message_types:
             logger.warning("Notification Type Not Known %s", message_type)
             return HttpResponseBadRequest("Invalid Notification Type")
 
