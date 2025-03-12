@@ -1,0 +1,66 @@
+stages:
+  - test
+  - release
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  POETRY_CACHE_DIR: "$CI_PROJECT_DIR/.cache/poetry"
+  PYIMAGE: py313
+
+.rules_mrs_and_protected:
+  - if: $CI_PIPELINE_SOURCE == "schedule"
+    when: never
+  - if: $CI_COMMIT_BRANCH && $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG && $CI_COMMIT_REF_PROTECTED == "true"
+  - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+
+.dev_dependency_job: &dev_dependency_job
+  image: "registry.gitlab.com/thelabnyc/python:${PYIMAGE}"
+  before_script:
+    # Setup Poetry to allow caching between jobs
+    - poetry config cache-dir $POETRY_CACHE_DIR
+    - poetry config virtualenvs.create true
+    - poetry config virtualenvs.in-project true
+    # Install dependencies
+    - poetry install
+  cache:
+    key: devdependencies-${PYIMAGE}
+    paths:
+      - .cache/pip/
+      - .cache/poetry/
+      - .venv/
+
+include:
+  - component: gitlab.com/thelabnyc/thelab-ci-components/precommit@0.3.1
+    rules:
+      - if: $CI_PIPELINE_SOURCE == "schedule"
+        when: never
+      - if: $CI_COMMIT_BRANCH && $CI_COMMIT_REF_PROTECTED == "true"
+      - if: $CI_COMMIT_TAG && $CI_COMMIT_REF_PROTECTED == "true"
+      - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+  - component: gitlab.com/thelabnyc/thelab-ci-components/publish-gitlab-release@0.3.1
+  - component: gitlab.com/thelabnyc/thelab-ci-components/publish-to-pypi@0.3.1
+    inputs:
+      image: "registry.gitlab.com/thelabnyc/python:${PYIMAGE}"
+
+
+test:lib:
+  <<: *dev_dependency_job
+  rules:
+    - !reference [.rules_mrs_and_protected]
+  stage: test
+  needs: []
+  parallel:
+    matrix:
+      - PYIMAGE: py312
+        TOX_SKIP_ENV: "^(?!py312)"
+      - PYIMAGE: py313
+        TOX_SKIP_ENV: "^(?!py313)"
+  script:
+    - poetry run tox
+  coverage: '/^TOTAL.+?(\d+\%)$/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
