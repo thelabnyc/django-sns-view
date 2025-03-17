@@ -22,7 +22,7 @@ packages = [
 
 [tool.poetry.group.dev.dependencies]
 mypy = "^1.15.0"
-ruff = "^0.9.10"
+ruff = "^0.10.0"
 coverage = "^7.6.12"
 django-stubs = "^5.1.3"
 types-cryptography = "^3.3.23.2"
