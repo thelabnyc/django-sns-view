@@ -1,4 +1,4 @@
-from typing import Literal, Optional
+from typing import Literal
 import uuid
 
 import pydantic
@@ -30,7 +30,7 @@ class UnsubscribeConfirmation(BaseSNSPayload):
 
 class Notification(BaseSNSPayload):
     Type: Literal["Notification"]
-    Subject: Optional[str] = None
+    Subject: str | None = None
     UnsubscribeURL: pydantic.HttpUrl
 
 
