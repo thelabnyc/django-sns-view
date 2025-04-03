@@ -15,6 +15,10 @@ dependencies = [
     "pydantic (>=2.11.0,<3.0.0)",
 ]
 
+[project.urls]
+Homepage = "https://gitlab.com/thelabnyc/django-sns-view"
+Repository = "https://gitlab.com/thelabnyc/django-sns-view"
+
 [tool.poetry]
 packages = [
     { include = "django_sns_view" },
