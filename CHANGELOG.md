@@ -1,5 +1,11 @@
 # Changes
 
+## v0.3.1 (2025-04-03)
+
+### Fix
+
+- set correct repo urls
+
 ## v0.3.0 (2025-04-03)
 
 ### Feat
