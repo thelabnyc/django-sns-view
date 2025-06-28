@@ -4,7 +4,7 @@ stages:
 
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
-  POETRY_CACHE_DIR: "$CI_PROJECT_DIR/.cache/poetry"
+  UV_CACHE_DIR: "$CI_PROJECT_DIR/.cache/uv"
   PYIMAGE: py313
 
 .rules_mrs_and_protected:
@@ -17,17 +17,13 @@ variables:
 .dev_dependency_job: &dev_dependency_job
   image: "registry.gitlab.com/thelabnyc/python:${PYIMAGE}"
   before_script:
-    # Setup Poetry to allow caching between jobs
-    - poetry config cache-dir $POETRY_CACHE_DIR
-    - poetry config virtualenvs.create true
-    - poetry config virtualenvs.in-project true
     # Install dependencies
-    - poetry install
+    - uv sync
   cache:
     key: devdependencies-${PYIMAGE}
     paths:
       - .cache/pip/
-      - .cache/poetry/
+      - .cache/uv/
       - .venv/
 
 include:
@@ -43,7 +39,6 @@ include:
     inputs:
       image: "registry.gitlab.com/thelabnyc/python:${PYIMAGE}"
 
-
 test:lib:
   <<: *dev_dependency_job
   rules:
@@ -57,7 +52,7 @@ test:lib:
       - PYIMAGE: py313
         TOX_SKIP_ENV: "^(?!py313)"
   script:
-    - poetry run tox
+    - uv run tox
   coverage: '/^TOTAL.+?(\d+\%)$/'
   artifacts:
     reports:
