@@ -1,5 +1,17 @@
 # Changes
 
+## v0.3.2 (2025-09-03)
+
+### Fix
+
+- **deps**: update dependency pydantic to >=2.11.3,<3.0.0
+- **deps**: update dependency pydantic to >=2.11.2,<3.0.0
+
+### Refactor
+
+- migrate black/flake8 -> ruff
+- migrate from poetry -> uv
+
 ## v0.3.1 (2025-04-03)
 
 ### Fix
