@@ -19,7 +19,7 @@ Repository = "https://gitlab.com/thelabnyc/django-sns-view"
 
 [dependency-groups]
 dev = [
-    "mypy (>=1.15.0)",
+    "mypy (>=1.17.1)",
     "ruff (>=0.12.0)",
     "coverage>=7.8.0",
     "django-stubs (>=5.1.3)",
