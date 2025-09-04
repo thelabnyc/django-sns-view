@@ -281,7 +281,7 @@ requires-dist = [
     { name = "cryptography", specifier = ">=45.0.6" },
     { name = "django", specifier = ">=4.2" },
     { name = "pydantic", specifier = ">=2.11.7,<3.0.0" },
-    { name = "requests", specifier = ">=2.32.3" },
+    { name = "requests", specifier = ">=2.32.5" },
 ]
 
 [package.metadata.requires-dev]
