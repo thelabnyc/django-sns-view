@@ -24,7 +24,7 @@ dev = [
     "coverage>=7.10.6",
     "django-stubs (>=5.2.5)",
     "types-cryptography (>=3.3.23.2)",
-    "types-requests (>=2.32.4.20250809)",
+    "types-requests (>=2.32.4.20250913)",
     "tox>=4.30.2",
     "tox-uv>=1.28.0",
 ]
