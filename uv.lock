@@ -360,7 +360,7 @@ dev = [
     { name = "django-stubs", specifier = ">=5.2.7" },
     { name = "mypy", specifier = ">=1.18.2" },
     { name = "ruff", specifier = ">=0.13.3" },
-    { name = "tox", specifier = ">=4.30.3" },
+    { name = "tox", specifier = ">=4.31.0" },
     { name = "tox-uv", specifier = ">=1.28.0" },
     { name = "types-cryptography", specifier = ">=3.3.23.2" },
     { name = "types-requests", specifier = ">=2.32.4.20250913" },
