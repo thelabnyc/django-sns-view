@@ -5,7 +5,7 @@ stages:
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
   UV_CACHE_DIR: "$CI_PROJECT_DIR/.cache/uv"
-  PYIMAGE: py313
+  PYIMAGE: "3.14"
 
 .rules_mrs_and_protected:
   - if: $CI_PIPELINE_SOURCE == "schedule"
@@ -47,10 +47,12 @@ test:lib:
   needs: []
   parallel:
     matrix:
-      - PYIMAGE: py312
+      - PYIMAGE: "3.12"
         TOX_SKIP_ENV: "^(?!py312)"
-      - PYIMAGE: py313
+      - PYIMAGE: "3.13"
         TOX_SKIP_ENV: "^(?!py313)"
+      - PYIMAGE: "3.14"
+        TOX_SKIP_ENV: "^(?!py314)"
   script:
     - uv run tox
   coverage: '/^TOTAL.+?(\d+\%)$/'
