@@ -349,7 +349,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "cryptography", specifier = ">=46.0.3" },
-    { name = "django", specifier = ">=4.2" },
+    { name = "django", specifier = ">=5.2" },
     { name = "pydantic", specifier = ">=2.12.5,<3.0.0" },
     { name = "requests", specifier = ">=2.32.5" },
 ]
