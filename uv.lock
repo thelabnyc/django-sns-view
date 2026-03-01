@@ -357,7 +357,7 @@ dev = [
     { name = "coverage", specifier = ">=7.13.4" },
     { name = "django-stubs", specifier = ">=5.2.9" },
     { name = "mypy", specifier = ">=1.19.1" },
-    { name = "ruff", specifier = ">=0.15.3" },
+    { name = "ruff", specifier = ">=0.15.4" },
     { name = "tox", specifier = ">=4.46.3" },
     { name = "tox-uv", specifier = ">=1.33.0" },
     { name = "types-cryptography", specifier = ">=3.3.23.2" },
