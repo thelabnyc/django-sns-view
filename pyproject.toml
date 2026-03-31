@@ -25,7 +25,7 @@ dev = [
     "django-stubs (>=6.0.1)",
     "types-cryptography (>=3.3.23.2)",
     "types-requests (>=2.33.0.20260327)",
-    "tox>=4.50.3",
+    "tox>=4.51.0",
     "tox-uv>=1.33.4",
 ]
 
