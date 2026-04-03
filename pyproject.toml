@@ -26,7 +26,7 @@ dev = [
     "types-cryptography (>=3.3.23.2)",
     "types-requests (>=2.33.0.20260327)",
     "tox>=4.52.0",
-    "tox-uv>=1.33.4",
+    "tox-uv>=1.34.0",
 ]
 
 [tool.hatch.build.targets.wheel]
