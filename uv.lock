@@ -415,7 +415,7 @@ requires-dist = [
 dev = [
     { name = "coverage", specifier = ">=7.15.1" },
     { name = "django-stubs", specifier = ">=6.0.1" },
-    { name = "mypy", specifier = ">=2.2.0" },
+    { name = "mypy", specifier = ">=2.3.0" },
     { name = "ruff", specifier = ">=0.15.21" },
     { name = "tox", specifier = ">=4.56.4" },
     { name = "tox-uv", specifier = ">=1.35.2" },
