@@ -416,7 +416,7 @@ dev = [
     { name = "coverage", specifier = ">=7.15.2" },
     { name = "django-stubs", specifier = ">=6.0.1" },
     { name = "mypy", specifier = ">=2.3.0" },
-    { name = "ruff", specifier = ">=0.15.22" },
+    { name = "ruff", specifier = ">=0.16.0" },
     { name = "tox", specifier = ">=4.58.0" },
     { name = "tox-uv", specifier = ">=1.36.0" },
     { name = "types-cryptography", specifier = ">=3.3.23.2" },
