@@ -543,7 +543,7 @@ dev = [
     { name = "tox", specifier = ">=4.61.2" },
     { name = "tox-uv", specifier = ">=1.36.0" },
     { name = "types-cryptography", specifier = ">=3.3.23.2" },
-    { name = "types-requests", specifier = ">=2.33.0.20260712" },
+    { name = "types-requests", specifier = ">=2.33.0.20260906" },
 ]
 
 [[package]]
