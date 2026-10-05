@@ -25,8 +25,8 @@ dev = [
     "django-stubs (>=6.0.1)",
     "types-cryptography (>=3.3.23.2)",
     "types-requests (>=2.33.0.20260906)",
-    "tox>=4.64.6",
-    "tox-uv>=1.36.0",
+    "tox>=4.64.7",
+    "tox-uv>=1.36.1",
 ]
 
 [tool.hatch.build.targets.wheel]
