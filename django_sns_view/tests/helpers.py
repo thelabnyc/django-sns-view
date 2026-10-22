@@ -30,6 +30,6 @@ class SNSBaseTest(TestCase):
         SNS_UNSUBSCRIBE_NOTIFICATION
     )
 
-    keyfileobj = open(DIRNAME + ("/test_data/example.pem"))
-    pemfile = keyfileobj.read().encode()
+    with open(DIRNAME + ("/test_data/example.pem")) as keyfileobj:
+        pemfile = keyfileobj.read().encode()
     x509_cert = x509.load_pem_x509_certificate(pemfile)

@@ -87,7 +87,7 @@ def confirm_subscription(payload: SubscriptionConfirmation) -> HttpResponse:
                 "sns_payload": payload,
             },
         )
-        raise e
+        raise
 
     return HttpResponse("OK")
 
@@ -114,11 +114,11 @@ def verify_notification(payload: AnySNSPayload) -> bool:
     elif payload.SignatureVersion == "2":
         hash_type = hashes.SHA256()
     else:
-        raise ValueError("Unknown SignatureVersion: %s" % payload.SignatureVersion)
+        raise ValueError(f"Unknown SignatureVersion: {payload.SignatureVersion}")
     pss = padding.PKCS1v15()
     try:
         if not isinstance(public_key, RSAPublicKey):
-            raise ValueError("Unknown key type: %s" % public_key)
+            raise ValueError(f"Unknown key type: {public_key}")  # noqa: TRY004
         public_key.verify(payload.Signature, message, pss, hash_type)
     except InvalidSignature as e:
         logger.error("Verification of signature raised an Error: %s", e)
@@ -138,7 +138,7 @@ def get_x509_cert(cert_url: str) -> x509.Certificate:
         response = requests.get(cert_url)
         response.raise_for_status()
     except HTTPError as e:
-        logger.error("Unable to fetch the keyfile: %s" % e)
+        logger.error("Unable to fetch the keyfile: %s", e)
         raise
     pemfile = smart_bytes(response.text)
     # Extract the first certificate in the file and confirm it's a valid

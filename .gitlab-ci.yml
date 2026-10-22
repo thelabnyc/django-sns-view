@@ -44,6 +44,10 @@ include:
     inputs:
       image: "registry.gitlab.com/thelabnyc/python:${PYIMAGE}"
 
+precommit:
+  rules:
+    - !reference [.rules_mrs_and_protected]
+
 test:lib:
   <<: *dev_dependency_job
   rules:
