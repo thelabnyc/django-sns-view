@@ -85,11 +85,11 @@ class SNSEndpoint(View):
         message = payload.Message
         logger.info(
             "SNS Notification received",
-            extra=dict(
-                message_type=payload.Type,
-                sns_payload=request.body,
-                payload_message=payload,
-            ),
+            extra={
+                "message_type": payload.Type,
+                "sns_payload": request.body,
+                "payload_message": payload,
+            },
         )
         self.handle_message(message, payload)
         return HttpResponse("OK")
