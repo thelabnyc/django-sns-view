@@ -518,7 +518,7 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "coverage", specifier = ">=7.17.0" },
+    { name = "coverage", specifier = ">=7.17.1" },
     { name = "django-stubs", specifier = ">=6.0.1" },
     { name = "mypy", specifier = ">=2.4.1" },
     { name = "ruff", specifier = ">=0.17.3" },
